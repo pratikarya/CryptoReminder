@@ -132,6 +132,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alarm\CryptoReceiver.cs" />
     <Compile Include="HomeView.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

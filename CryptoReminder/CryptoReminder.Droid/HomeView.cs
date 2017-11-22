@@ -11,6 +11,7 @@ using CryptoReminder.Droid.Service;
 using Android.Content;
 using Android.Support.V4.App;
 using Android.Widget;
+using CryptoReminder.Droid.Alarm;
 
 namespace CryptoReminder.Droid
 {
@@ -30,7 +31,13 @@ namespace CryptoReminder.Droid
         {
             base.OnResume();
 
-            StartService(new Intent(this, typeof(CryptoReminderService)));
+            var alarmManager = (AlarmManager)GetSystemService(Context.AlarmService);
+
+            var intent = new Intent(this, typeof(CryptoReceiver));
+            var pending = PendingIntent.GetBroadcast(this, 0, intent, PendingIntentFlags.UpdateCurrent);
+            alarmManager.SetRepeating(AlarmType.RtcWakeup, 1, 60 * 1000, pending);
+
+            //StartService(new Intent(this, typeof(CryptoReminderService)));
         }
 
         protected override void OnPause()

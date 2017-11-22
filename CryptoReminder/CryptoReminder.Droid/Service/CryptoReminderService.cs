@@ -42,6 +42,9 @@ namespace CryptoReminder.Droid.Service
                 timer = new Timer(HandleTimerCallback, startTime, 0, TimerWait);
                 isStarted = true;
             }
+
+            
+
             return StartCommandResult.NotSticky;
         }
 
