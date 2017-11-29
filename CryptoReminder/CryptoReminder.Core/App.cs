@@ -1,4 +1,8 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using CryptoReminder.Core.CryptoCurrency;
+using CryptoReminder.Core.RealmService;
+using CryptoReminder.Core.ViewModels;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 
 namespace CryptoReminder.Core
 {
@@ -8,7 +12,10 @@ namespace CryptoReminder.Core
         {
             base.Initialize();
 
-            RegisterAppStart<HomeViewModel>();
+            Mvx.RegisterSingleton<ICryptoRealmService>(new CryptoRealmService());
+            Mvx.RegisterSingleton<ICryptoDelegate>(new CryptoDelegate());
+
+            RegisterNavigationServiceAppStart<CryptoCurrencyListViewModel>();
         }
     }
 }

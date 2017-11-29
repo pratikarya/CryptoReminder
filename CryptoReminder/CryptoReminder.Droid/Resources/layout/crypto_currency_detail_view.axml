@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:focusable="true"
+  android:focusableInTouchMode="true">
+
+  <include
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar" />
+  
+  <TextView
+    android:id="@+id/txtAlarm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="14dp"
+    android:gravity="center"
+    android:textColor="@color/primaryTextColor"
+    android:layout_margin="10dp"
+    android:visibility="gone"/>
+
+  <EditText
+    android:id="@+id/etSetAlarmValue"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:singleLine="true"
+    android:textSize="14dp"
+    android:textColor="@color/primaryTextColor"
+    android:hint="@string/etHintReminder"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:inputType="numberDecimal"
+    android:visibility="gone"
+    local:MvxBind="Text AlarmValue"/> 
+  
+  <Button
+    android:id="@+id/btnSetAlarm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="14dp"
+    android:layout_gravity="center"
+    android:textColor="@color/primaryTextColor"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    local:MvxBind="Click SetAlarmCommand"/>
+
+</LinearLayout>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:local="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+  
+  <include
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar" />
+
+  <LinearLayout
+    android:id="@+id/llCryptoList"
+	  android:orientation="vertical"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:layout_weight="1">
+
+    <EditText
+      android:id="@+id/etSearchCryptoList"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="16dp"
+      android:hint="Search"
+      android:layout_marginBottom="5dp"
+      android:textColor="@color/primaryTextColor"
+      local:MvxBind="Text CryptoSearchString"/>
+
+    <android.support.design.widget.CoordinatorLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <MvvmCross.Droid.Support.V4.MvxSwipeRefreshLayout
+        android:id="@+id/refresherCryptoCurrency"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        local:MvxBind="Refreshing IsCryptoCurrencyRefreshing; RefreshCommand ReloadCryptoCurrencyCommand">
+
+        <MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+          android:id="@+id/rvCryptoCurrency"
+          android:scrollbars="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          local:MvxItemTemplate="@layout/crypto_list_item_view"
+          local:MvxBind="ItemsSource SortedCryptoCurrencyList; ItemClick SelectedCryptoItemCommand" />
+
+      </MvvmCross.Droid.Support.V4.MvxSwipeRefreshLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+    
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/llMyCryptoList"
+	  android:orientation="vertical"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:visibility="gone"
+    android:layout_weight="1">
+
+    <EditText
+      android:id="@+id/etSearchMyCryptoList"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="5dp"
+      android:textSize="16dp"
+      android:hint="Search"
+      android:textColor="@color/primaryTextColor"
+      local:MvxBind="Text MyCryptoSearchString"/>
+
+    <android.support.design.widget.CoordinatorLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <MvvmCross.Droid.Support.V4.MvxSwipeRefreshLayout
+        android:id="@+id/myCryptoCurrencyRefresher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        local:MvxBind="Refreshing IsMyCryptoCurrencyRefreshing; RefreshCommand ReloadMyCryptoCurrencyCommand">
+
+        <MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+          android:id="@+id/rvMyCryptoCurrency"
+          android:scrollbars="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          local:MvxItemTemplate="@layout/crypto_list_item_view"
+          local:MvxBind="ItemsSource SortedMyCryptoCurrencyList; ItemClick SelectedMyCryptoItemCommand" />
+
+      </MvvmCross.Droid.Support.V4.MvxSwipeRefreshLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/llTab"
+	  android:orientation="horizontal"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+    android:background="@color/primaryDarkColor"
+    android:layout_gravity="bottom"
+    android:gravity="center">
+
+    <TextView
+      android:id="@+id/txtCryptoListTab"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:textSize="16dp"
+      android:padding="5dp"
+      android:layout_margin="5dp"
+      android:text="@string/tabCryptoList"
+      android:textColor="@color/lightGrayTextColor"/>
+
+    <TextView
+	    android:layout_width="1dp"
+	    android:layout_height="match_parent"
+      android:background="@color/whiteTextColor"/>
+
+    <TextView
+      android:id="@+id/txtMyCryptoListTab"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:textSize="16dp"
+      android:padding="5dp"
+      android:layout_margin="5dp"
+      android:text="@string/tabMyCryptoList"
+      android:textColor="@color/lightGrayTextColor"/>
+    
+  </LinearLayout>
+  
+</LinearLayout>

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">CryptoReminder.Droid</string>
+  <string name="app_name">CryptoReminder</string>
+  <string name="btnSetalarmTitle">Set Alarm</string>
+  <string name="btnRemovealarmTitle">Remove Alarm</string>
+  <string name="etHintReminder">Set your value.</string>
+  <string name="tabCryptoList">Live Values</string>
+  <string name="tabMyCryptoList">My Reminders</string>
 </resources>

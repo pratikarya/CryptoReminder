@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <!-- base theme -->
+  <style name="MaterialTheme" parent="ParentMaterialTheme">
+
+
+  </style>
+
+  <style name ="ParentMaterialTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name ="colorPrimary">@color/primaryColor</item>
+    <item name ="colorPrimaryDark">@color/primaryDarkColor</item>
+    <item name="colorAccent">@color/primaryLightColor</item>
+  </style>
+  
+</resources>

@@ -12,6 +12,6 @@ namespace CryptoReminder.Core.CryptoCurrency.Contract.Dtos
         public string Message { get; set; }
 
         [JsonProperty("result")]
-        public List<CryptoCurrency> Currencies { get; set; }
+        public List<CryptoCurrencyDto> Currencies { get; set; }
     }
 }

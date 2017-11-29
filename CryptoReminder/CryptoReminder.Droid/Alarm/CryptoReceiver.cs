@@ -1,44 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using System.Net;
 using Newtonsoft.Json;
 using CryptoReminder.Core.CryptoCurrency.Contract.Dtos;
+using CryptoReminder.Core.RealmService;
+using System.Linq;
+using CryptoReminder.Core.CryptoCurrency;
+using CryptoReminder.Core.Utility;
 
 namespace CryptoReminder.Droid.Alarm
 {
     [BroadcastReceiver]
     public class CryptoReceiver : BroadcastReceiver
     {
-        public override void OnReceive(Context context, Intent intent)
+        ICryptoDelegate CryptoDelegate;
+        ICryptoRealmService RealmService;
+
+        public CryptoReceiver()
+        {
+            RealmService = new CryptoRealmService();
+            CryptoDelegate = new CryptoDelegate();
+        }
+
+        public async override void OnReceive(Context context, Intent intent)
         {
             try
             {
-                var client = new WebClient();
-                var data = client.DownloadString("https://bittrex.com/api/v1.1/public/getmarketsummaries");
-                var currency = JsonConvert.DeserializeObject<CryptoCurrencyResponse>(data).Currencies;
-                if (currency != null && currency.Count > 0)
+                var cryptoCurrencies = await CryptoDelegate.GetCryptoCurrencyList();
+                if (cryptoCurrencies != null && cryptoCurrencies.Count > 0)
                 {
-                    var message = "The last bid of " + currency[0].MarketName + " is " + currency[0].Last;
+                    var reminders = RealmService.GetReminders();
+                    string message = "";
 
-                    var expVal = currency[0].Last;
-                    //var actualVal = expVal.TryParse()
+                    foreach(var reminder in reminders)
+                    {
+                        if(reminder.IsAlarmSet)
+                        {
+                            var cryptoCurrency = cryptoCurrencies.FirstOrDefault(x => x.MarketName == reminder.MarketName && x.Last > reminder.Last);
 
-                    //if(currency[0].Last > )
-                    //{
+                            if (cryptoCurrency != null)
+                            {
+                                message += "The last bid of " + reminder.MarketName + " is " + Helper.ConvertExpo(cryptoCurrency.Last) + " BTC.\n";
+                            }
+                        }
+                    }
 
+                    if (string.IsNullOrEmpty(message))
+                        return;
+
+                    Notification.BigTextStyle textStyle = new Notification.BigTextStyle();
+                    textStyle.BigText(message);
                     Notification.Builder builder = new Notification.Builder(context)
-                               .SetContentTitle("Crypto Reminder")
-                               .SetSmallIcon(Resource.Drawable.notification_bg)
-                               .SetContentText(message);
+                                       .SetContentTitle("Crypto Reminder.")
+                                       .SetSmallIcon(Resource.Drawable.notification_bg)
+                                       .SetStyle(textStyle);
 
                     // Build the notification:
                     Notification notification = builder.Build();
@@ -49,8 +65,6 @@ namespace CryptoReminder.Droid.Alarm
                     // Publish the notification:
                     const int notificationId = 0;
                     notificationManager.Notify(notificationId, notification);
-
-                    // }
                 }
                 
             }
