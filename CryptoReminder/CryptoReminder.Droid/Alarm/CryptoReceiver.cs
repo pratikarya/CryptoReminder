@@ -8,6 +8,7 @@ using CryptoReminder.Core.RealmService;
 using System.Linq;
 using CryptoReminder.Core.CryptoCurrency;
 using CryptoReminder.Core.Utility;
+using MvvmCross.Droid.Platform;
 
 namespace CryptoReminder.Droid.Alarm
 {
@@ -19,14 +20,18 @@ namespace CryptoReminder.Droid.Alarm
 
         public CryptoReceiver()
         {
-            RealmService = new CryptoRealmService();
-            CryptoDelegate = new CryptoDelegate();
         }
 
         public async override void OnReceive(Context context, Intent intent)
         {
             try
             {
+                var setupSingleton = MvxAndroidSetupSingleton.EnsureSingletonAvailable(context);
+                setupSingleton.EnsureInitialized();
+
+                RealmService = new CryptoRealmService();
+                CryptoDelegate = new CryptoDelegate();
+
                 var cryptoCurrencies = await CryptoDelegate.GetCryptoCurrencyList();
                 if (cryptoCurrencies != null && cryptoCurrencies.Count > 0)
                 {

@@ -15,7 +15,7 @@ using Android.Graphics;
 
 namespace CryptoReminder.Droid
 {
-    [Activity(Label = "", MainLauncher = true)]
+    [Activity(MainLauncher = true)]
     public class CryptoCurrencyListView : BaseActivity<CryptoCurrencyListViewModel>
     {
         Toolbar _toolbar;
@@ -59,7 +59,7 @@ namespace CryptoReminder.Droid
             var alarmManager = (AlarmManager)GetSystemService(Context.AlarmService);
             var intent = new Intent(this, typeof(CryptoReceiver));
             var pendingIntent = PendingIntent.GetBroadcast(this, 0, intent, PendingIntentFlags.UpdateCurrent);
-            alarmManager.SetRepeating(AlarmType.RtcWakeup, 1, 60000, pendingIntent);
+            alarmManager.SetRepeating(AlarmType.RtcWakeup, 1, 5000, pendingIntent);
         }
 
         protected override void OnPause()
