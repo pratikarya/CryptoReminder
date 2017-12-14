@@ -4,5 +4,7 @@
 	<uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 	<uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
 	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<application android:theme="@style/MaterialTheme" android:allowBackup="true" android:label="CryptoReminder" android:icon="@drawable/app_icon"></application>
 </manifest>

@@ -4,6 +4,7 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Platform;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
+using MvvmCross.Platform.Logging;
 
 namespace CryptoReminder.Droid
 {
@@ -25,5 +26,9 @@ namespace CryptoReminder.Droid
 
             base.InitializeFirstChance();
         }
+
+        protected override MvxLogProviderType GetDefaultLogProviderType()
+    => MvxLogProviderType.None;
+
     }
 }
