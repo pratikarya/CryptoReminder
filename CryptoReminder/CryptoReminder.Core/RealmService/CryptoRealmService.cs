@@ -31,8 +31,12 @@ namespace CryptoReminder.Core.RealmService
                         var alarm = _realm.Find<CryptoCurrencyReminderRealm>(cryptoCurrencyReminder.MarketName);
                         if (alarm != null)
                         {
-                            alarm.IsAlarmSet = cryptoCurrencyReminder.IsAlarmSet;
-                            alarm.Last = cryptoCurrencyReminder.Last;
+                            //alarm.IsAlarmSet = cryptoCurrencyReminder.IsAlarmSet;
+                            //alarm.Last = cryptoCurrencyReminder.Last;
+
+                            //remove alarm
+
+                            _realm.Remove(alarm);
                         }
                         else
                         {

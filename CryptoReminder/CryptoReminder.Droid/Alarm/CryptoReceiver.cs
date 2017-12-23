@@ -9,6 +9,7 @@ using System.Linq;
 using CryptoReminder.Core.CryptoCurrency;
 using CryptoReminder.Core.Utility;
 using MvvmCross.Droid.Platform;
+using Android.Media;
 
 namespace CryptoReminder.Droid.Alarm
 {
@@ -42,7 +43,7 @@ namespace CryptoReminder.Droid.Alarm
                     {
                         if(reminder.IsAlarmSet)
                         {
-                            var cryptoCurrency = cryptoCurrencies.FirstOrDefault(x => x.MarketName == reminder.MarketName && x.Last > reminder.Last);
+                            var cryptoCurrency = cryptoCurrencies.FirstOrDefault(x => x.MarketName == reminder.MarketName && x.Last == reminder.Last);
 
                             if (cryptoCurrency != null)
                             {
@@ -54,12 +55,15 @@ namespace CryptoReminder.Droid.Alarm
                     if (string.IsNullOrEmpty(message))
                         return;
 
+                    string pathToPushSound = "android.resource://" + context.ApplicationContext.PackageName + "/raw/alarm";
+
                     Notification.BigTextStyle textStyle = new Notification.BigTextStyle();
                     textStyle.BigText(message);
                     Notification.Builder builder = new Notification.Builder(context)
-                                       .SetContentTitle("Crypto Reminder.")
-                                       .SetSmallIcon(Resource.Drawable.notification_bg)
-                                       .SetStyle(textStyle);
+                        .SetSound(Android.Net.Uri.Parse(pathToPushSound))
+                        .SetContentTitle("Crypto Reminder.")
+                        .SetSmallIcon(Resource.Drawable.app_icon)
+                        .SetStyle(textStyle);
 
                     // Build the notification:
                     Notification notification = builder.Build();

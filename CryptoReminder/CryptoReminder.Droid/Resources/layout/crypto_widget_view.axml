@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/widgetBackground"
+  android:background="#f5f5f5"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <TextView
+      android:id="@+id/txtCryptoWidgetTitle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="10dp"
+      android:layout_weight="1"
+      android:textColor="@color/primaryTextColor"
+      android:text="Crypto Reminder"/>
+    
+    <Button
+      android:id="@+id/btnRefreshWidget"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:background="@drawable/ic_refresh"/>
+  
+  </LinearLayout>
+  
+  <!--<MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+    android:id="@+id/rvWidgetCryptoList"
+    android:scrollbars="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    local:MvxItemTemplate="@layout/crypto_list_item_view"/>-->
+
+</LinearLayout>
