@@ -18,4 +18,4 @@ namespace CryptoReminder.Core.CryptoCurrency.Contract.Dtos
         public double PrevDay { get; set; }
         public DateTime Created { get; set; }
     }
-}
+} 

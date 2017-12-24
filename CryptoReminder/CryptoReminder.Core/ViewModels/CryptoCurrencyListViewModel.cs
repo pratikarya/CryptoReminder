@@ -2,6 +2,7 @@
 using CryptoReminder.Core.CryptoCurrency;
 using CryptoReminder.Core.CryptoCurrency.Contract.Dtos;
 using CryptoReminder.Core.Dialog;
+using CryptoReminder.Core.Koinex;
 using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace CryptoReminder.Core.ViewModels
     {
         public IDialogService DialogService { get; set; }
         public ICryptoDelegate CryptoDelegate { get; set; }
+        public IKoinexDelegate KoinexDelegate { get; set; }
 
-        public CryptoCurrencyListViewModel(IDialogService dialogService, ICryptoDelegate cryptoDelegate)
+        public CryptoCurrencyListViewModel(IDialogService dialogService, ICryptoDelegate cryptoDelegate, IKoinexDelegate koinexDelegate)
         {
             CryptoDelegate = cryptoDelegate;
             DialogService = dialogService;
+            KoinexDelegate = koinexDelegate;
         }
 
         #region CrypotoCurrencyList
@@ -79,6 +82,8 @@ namespace CryptoReminder.Core.ViewModels
 
             try
             {
+                var koinex = await KoinexDelegate.GetKoinexList();
+
                 CryptoCurrencyList = await CryptoDelegate.GetCryptoCurrencyList();
 
                 SortedCryptoCurrencyList = CryptoCurrencyList;
