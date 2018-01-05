@@ -33,7 +33,7 @@ namespace CryptoReminder.Droid.ViewHolders
 
         public void Configure(CryptoCurrencyReminderDto cryptoCurrency)
         {
-            _txtLastBid.Text = "You have set your reminder at " + Helper.ConvertExpo(cryptoCurrency.Last) + " BTC.";
+            //_txtLastBid.Text = "You have set your reminder at " + Helper.ConvertExpo(cryptoCurrency.LowerLimit) + " BTC.";
         }
     }
 }

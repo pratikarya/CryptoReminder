@@ -8,6 +8,12 @@ namespace CryptoReminder.Core.CryptoCurrency
     {
         Task<List<CryptoCurrencyDto>> GetCryptoCurrencyList();
 
-        Task<List<CryptoCurrencyReminderDto>> GetMyCryptoCurrencyList();
+        Task<List<CryptoCurrencyReminderDto>> GetReminder(ReminderSearchDto search);
+
+        Task<CryptoCurrencyReminderDto> GetReminderDetails(CryptoCurrencyReminderDto cryptoCurrency);
+
+        Task<CryptoCurrencyReminderDto> SaveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder);
+
+        Task<bool> RemoveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder);
     }
 }

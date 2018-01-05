@@ -5,8 +5,6 @@ namespace CryptoReminder.Core.Common
 {
     public class BaseViewModel : MvxViewModel, IDisposable
     {
-
-
         public void Dispose()
         {
 

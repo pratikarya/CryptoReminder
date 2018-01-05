@@ -9,6 +9,7 @@ using Android.Content;
 using CryptoReminder.Droid.Alarm;
 using CryptoReminder.Core.Utility;
 using Android.Views;
+using System;
 
 namespace CryptoReminder.Droid.Views
 {
@@ -16,9 +17,10 @@ namespace CryptoReminder.Droid.Views
     public class CryptoCurrencyDetailView : BaseActivity<CryptoCurrencyDetailViewModel>
     {
         Toolbar _toolbar;
-        TextView _toolBarTitle, _txtAlarm;
-        EditText _etSetAlarm;
-        Button _btnSetAlarm;
+        LinearLayout _llInputs, _llCreateAlarm, _llUpdateAlarm, _llSaveAlarmChanges;
+        TextView _toolBarTitle, _txtLowerLimit, _txtExactValue, _txtUpperLimit;
+        EditText _etLowerLimit, _etExactValue, _etUpperLimit;
+        Button _btnCreateAlarm, _btnEditAlarm, _btnRemoveAlarm, _btnSaveAlarmChanges;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -33,71 +35,99 @@ namespace CryptoReminder.Droid.Views
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == "CryptoCurrencyReminder")
-            {
-                if (ViewModel.CryptoCurrencyReminder != null && ViewModel.CryptoCurrencyReminder.IsAlarmSet)
-                {
-                    _txtAlarm.Visibility = Android.Views.ViewStates.Visible;
-                    _etSetAlarm.Visibility = Android.Views.ViewStates.Gone;
-                    _txtAlarm.Text = "Alarm has been set for " + ViewModel.CurrentMarketName + " at " + Helper.ConvertExpo(ViewModel.CryptoCurrencyReminder.Last) + " BTC.";
-                    _btnSetAlarm.SetText(Resource.String.btnRemovealarmTitle);
-                }
-                else
-                {
-                    _txtAlarm.Visibility = Android.Views.ViewStates.Gone;
-                    _etSetAlarm.Visibility = Android.Views.ViewStates.Visible;
-                    _btnSetAlarm.SetText(Resource.String.btnSetalarmTitle);
-                }
-            }
-        }
-
         protected override void OnResume()
         {
             base.OnResume();
 
             ViewModel.LoadCommand.Execute(null);
-            
-            var reminders = ViewModel.RealmService.GetReminders();
-
-            if(reminders == null || reminders.Count == 0)
-            {
-                //start alarm manager.
-
-                var alarmManager = (AlarmManager) GetSystemService(Context.AlarmService);
-                var intent = new Intent(this, typeof(CryptoReceiver));
-                var pendingIntent = PendingIntent.GetBroadcast(this, 0, intent, PendingIntentFlags.UpdateCurrent);
-                alarmManager.SetRepeating(AlarmType.RtcWakeup, 1, 60000, pendingIntent);
-            }
-
-            _etSetAlarm.SetHint(Resource.String.etHintReminder);
         }
 
         private void GetReferences()
         {
             _toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
+            _llUpdateAlarm = FindViewById<LinearLayout>(Resource.Id.llUpdateAlarm);
+            _llInputs = FindViewById<LinearLayout>(Resource.Id.llInputs);
+            _llCreateAlarm = FindViewById<LinearLayout>(Resource.Id.llCreateAlarm);
+            _llSaveAlarmChanges = FindViewById<LinearLayout>(Resource.Id.llSaveAlarmChanges);
             _toolBarTitle = FindViewById<TextView>(Resource.Id.toolbarTitle);
-            _txtAlarm = FindViewById<TextView>(Resource.Id.txtAlarm);
-            _btnSetAlarm = FindViewById<Button>(Resource.Id.btnSetAlarm);
-            _etSetAlarm = FindViewById<EditText>(Resource.Id.etSetAlarmValue);
+            _txtLowerLimit = FindViewById<TextView>(Resource.Id.txtLowerLimit);
+            _txtExactValue = FindViewById<TextView>(Resource.Id.txtExactValue);
+            _txtUpperLimit = FindViewById<TextView>(Resource.Id.txtUpperLimit);
+            _etLowerLimit = FindViewById<EditText>(Resource.Id.etLowerLimit);
+            _etExactValue = FindViewById<EditText>(Resource.Id.etExactValue);
+            _etUpperLimit = FindViewById<EditText>(Resource.Id.etUpperLimit);
+            _btnCreateAlarm = FindViewById<Button>(Resource.Id.btnCreateAlarm);
+            _btnEditAlarm = FindViewById<Button>(Resource.Id.btnEditAlarm);
+            _btnRemoveAlarm = FindViewById<Button>(Resource.Id.btnRemoveAlarm);
+            _btnSaveAlarmChanges = FindViewById<Button>(Resource.Id.btnSaveAlarmChanges);
         }
 
         private void CreateUi()
         {
-            _toolBarTitle.Text = ViewModel.CurrentMarketName;
-            _btnSetAlarm.SetTextColor(Color.Black);
-            _etSetAlarm.KeyPress += _etSetAlarm_KeyPress;
-        }
+            _btnEditAlarm.Click += _btnEditAlarm_Click;
+            _btnSaveAlarmChanges.Click += _btnSaveAlarmChanges_Click;
 
-        private void _etSetAlarm_KeyPress(object sender, Android.Views.View.KeyEventArgs e)
-        {
-            e.Handled = false;
-            if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+            if (ViewModel.IsNew)
             {
-                ViewModel.SetAlarmCommand.Execute(null);
-                e.Handled = true;
+                _toolBarTitle.Text = "New reminder for " + ViewModel.Reminder.MarketName;
+
+                _llCreateAlarm.Visibility = ViewStates.Visible;
+                _llUpdateAlarm.Visibility = ViewStates.Gone;
+            }
+            else
+            {
+                _llCreateAlarm.Visibility = ViewStates.Gone;
+                _llUpdateAlarm.Visibility = ViewStates.Visible;
+
+                _etLowerLimit.Enabled = false;
+                _etExactValue.Enabled = false;
+                _etUpperLimit.Enabled = false;
             }
         }
+
+        private void _btnEditAlarm_Click(object sender, System.EventArgs e)
+        {
+            _llSaveAlarmChanges.Visibility = ViewStates.Visible;
+
+            _etLowerLimit.Enabled = true;
+            _etExactValue.Enabled = true;
+            _etUpperLimit.Enabled = true;
+
+            _etLowerLimit.RequestFocus();
+        }
+
+        private void _btnSaveAlarmChanges_Click(object sender, EventArgs e)
+        {
+            ViewModel.UpdateAlarmCommand.Execute(null);
+
+            _llSaveAlarmChanges.Visibility = ViewStates.Gone;
+
+            _etLowerLimit.Enabled = false;
+            _etExactValue.Enabled = false;
+            _etUpperLimit.Enabled = false;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Reminder")
+            {
+                _toolBarTitle.Text = ViewModel.Reminder.ToString();
+
+                _txtExactValue.Text = ViewModel.Reminder.IsExactValueSet ? "Your current exact value : " + ViewModel.Reminder.ExactValue.ConvertExpo() : "Set exact value.";
+                _txtLowerLimit.Text = ViewModel.Reminder.IsLowerLimitSet ? "Your current lower limit : " + ViewModel.Reminder.LowerLimit.ConvertExpo() : "Set lower limit.";
+                _txtUpperLimit.Text = ViewModel.Reminder.IsUpperLimitSet ? "Your current upper limit : " + ViewModel.Reminder.UpperLimit.ConvertExpo() : "Set upper limit.";
+
+            }
+        }
+
+        //private void _etSetAlarm_KeyPress(object sender, Android.Views.View.KeyEventArgs e)
+        //{
+        //    e.Handled = false;
+        //    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+        //    {
+        //        ViewModel.SetAlarmCommand.Execute(null);
+        //        e.Handled = true;
+        //    }
+        //}
     }
 }

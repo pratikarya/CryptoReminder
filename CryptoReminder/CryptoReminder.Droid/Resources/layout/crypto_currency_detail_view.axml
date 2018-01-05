@@ -11,42 +11,153 @@
   <include
     android:id="@+id/toolbar"
     layout="@layout/toolbar" />
-  
-  <TextView
-    android:id="@+id/txtAlarm"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="14dp"
-    android:gravity="center"
-    android:textColor="@color/primaryTextColor"
-    android:layout_margin="10dp"
-    android:visibility="gone"/>
 
-  <EditText
-    android:id="@+id/etSetAlarmValue"
+  <LinearLayout
+    android:id="@+id/llInputs"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:singleLine="true"
-    android:textSize="14dp"
-    android:textColor="@color/primaryTextColor"
-    android:hint="@string/etHintReminder"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:inputType="numberDecimal"
-    android:visibility="gone"
-    local:MvxBind="Text AlarmValue"/> 
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:layout_margin="10dp">
+    
+    <EditText
+      android:id="@+id/etLowerLimit"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:textSize="14dp"
+      android:textColor="@color/primaryTextColor"
+      android:hint="@string/etHintLowerLimit"
+      android:inputType="numberDecimal"
+      local:MvxBind="Text Reminder.LowerLimit"/>
+     
+    <TextView
+      android:id="@+id/txtLowerLimit"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14dp"
+      android:text="Lower limit"
+      android:layout_marginBottom="10dp"
+      android:textColor="@color/lightGrayTextColor"/> 
+
+    <EditText
+      android:id="@+id/etExactValue"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:textSize="14dp"
+      android:textColor="@color/primaryTextColor"
+      android:hint="@string/etHintExactValue"
+      android:inputType="numberDecimal"
+      local:MvxBind="Text Reminder.ExactValue"/>
+    
+    <TextView
+      android:id="@+id/txtExactValue"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Exact value"
+      android:layout_marginBottom="10dp"
+      android:textColor="@color/lightGrayTextColor"/>
+
+
+    <EditText
+      android:id="@+id/etUpperLimit"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:singleLine="true"
+      android:textSize="14dp"
+      android:textColor="@color/primaryTextColor"
+      android:hint="@string/etHintUpperLimit"
+      android:layout_marginBottom="5dp"
+      android:inputType="numberDecimal"
+      local:MvxBind="Text Reminder.UpperLimit"/>
+    
+    <TextView
+      android:id="@+id/txtUpperLimit"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Upper limit"
+      android:layout_marginBottom="10dp"
+      android:textColor="@color/lightGrayTextColor"/>
+
+  </LinearLayout>  
   
-  <Button
-    android:id="@+id/btnSetAlarm"
+  <LinearLayout
+    android:id="@+id/llUpdateAlarm"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="14dp"
-    android:layout_gravity="center"
-    android:textColor="@color/primaryTextColor"
-    android:layout_marginBottom="10dp"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    local:MvxBind="Click SetAlarmCommand"/>
+    android:layout_marginBottom="10dp">
+        
+    <Button
+      android:id="@+id/btnEditAlarm"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14dp"
+      android:textColor="@color/primaryTextColor"
+      android:layout_weight="1"
+      android:textAllCaps="false"
+      android:text="Edit Reminder"/>
+    
+    <Button
+      android:id="@+id/btnRemoveAlarm"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14dp"
+      android:textColor="@color/primaryTextColor"
+      android:layout_weight="1"
+      android:textAllCaps="false"
+      android:text="Remove Reminder"
+      local:MvxBind="Click RemoveAlarmCommand"/>
+  
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/llSaveAlarmChanges"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp">
+
+    <Button
+      android:id="@+id/btnSaveAlarmChanges"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14dp"
+      android:textColor="@color/primaryTextColor"
+      android:layout_weight="1"
+      android:textAllCaps="false"
+      android:text="Save changes"/>
+    
+  </LinearLayout>
+  
+  <LinearLayout
+    android:id="@+id/llCreateAlarm"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+    android:layout_margin="10dp">
+
+    <Button
+      android:id="@+id/btnCreateAlarm"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Create Reminder"
+      android:textSize="14dp"
+      android:textAllCaps="false"
+      android:textColor="@color/primaryTextColor"
+      local:MvxBind="Click UpdateAlarmCommand"/>
+  
+  </LinearLayout>
 
 </LinearLayout>

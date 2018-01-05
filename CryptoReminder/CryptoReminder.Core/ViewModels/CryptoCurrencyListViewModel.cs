@@ -22,7 +22,7 @@ namespace CryptoReminder.Core.ViewModels
             DialogService = dialogService;
         }
 
-        #region CrypotoCurrencyList
+        #region CryptoCurrencyList
 
         private string _cryptoSearchString = "";
         public string CryptoSearchString
@@ -131,7 +131,7 @@ namespace CryptoReminder.Core.ViewModels
 
         public void DoSelectedCryptoItemCommand(CryptoCurrencyDto cryptoCurrency)
         {
-            ShowViewModel<CryptoCurrencyDetailViewModel>(new { cryptoCurrencyName = cryptoCurrency.MarketName });
+            ShowViewModel<RemindersListViewModel>(new { cryptoCurrencyName = cryptoCurrency.MarketName });
         }
 
         #endregion
@@ -193,7 +193,12 @@ namespace CryptoReminder.Core.ViewModels
 
             try
             {
-                MyCryptoCurrencyList = await CryptoDelegate.GetMyCryptoCurrencyList();
+                var searchDto = new ReminderSearchDto
+                {
+                    Type = SearchType.GroupedReminders
+                };
+
+                MyCryptoCurrencyList = await CryptoDelegate.GetReminder(searchDto);
 
                 SortedMyCryptoCurrencyList = MyCryptoCurrencyList;
             }
@@ -245,7 +250,7 @@ namespace CryptoReminder.Core.ViewModels
 
         public void DoSelectedMyCryptoItemCommand(CryptoCurrencyReminderDto cryptoCurrency)
         {
-            ShowViewModel<CryptoCurrencyDetailViewModel>(new { cryptoCurrencyName = cryptoCurrency.MarketName });
+            ShowViewModel<RemindersListViewModel>(new { cryptoCurrencyName = cryptoCurrency.MarketName });
         }
 
         #endregion
@@ -253,7 +258,6 @@ namespace CryptoReminder.Core.ViewModels
         public override void DisposeViewModel()
         {
             base.DisposeViewModel();
-
         }
     }
 }

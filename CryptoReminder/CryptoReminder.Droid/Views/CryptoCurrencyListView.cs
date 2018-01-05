@@ -48,11 +48,7 @@ namespace CryptoReminder.Droid
         {
             base.OnResume();
 
-            if (IsFirstLoad)
-            {
-                ViewModel.LoadCryptoCurrencyCommand.Execute(null);
-                IsFirstLoad = false;
-            }
+            ViewModel.LoadCryptoCurrencyCommand.Execute(null);
 
             //start alarm manager.
 

@@ -13,19 +13,19 @@ namespace CryptoReminder.Droid.ViewHolders
     {
         CryptoCurrencyListViewModel _vm;
         Activity _activity;
-        TextView _txtMarketName, _txtLastBid;
+        TextView _txtMarketName, _txtLastValue;
 
         public CryptoCurrencyViewHolder(View itemView, IMvxAndroidBindingContext context, CryptoCurrencyListViewModel vm, Activity activity) : base(itemView, context)
         {
             _vm = vm;
             _activity = activity;
             _txtMarketName = itemView.FindViewById<TextView>(Resource.Id.txtMarketName);
-            _txtLastBid = itemView.FindViewById<TextView>(Resource.Id.txtMarketLastBid);
+            _txtLastValue = itemView.FindViewById<TextView>(Resource.Id.txtMarketLastBid);
         }
 
         public void Configure(CryptoCurrencyDto cryptoCurrency)
         {
-            _txtLastBid.Text = "Last Bid : " + Helper.ConvertExpo(cryptoCurrency.Last) + " BTC.";
+            _txtLastValue.Text = "Last value : " + cryptoCurrency.Last.ConvertExpo() + ".";
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using CryptoReminder.Core.Common;
+using CryptoReminder.Core.CryptoCurrency;
 using CryptoReminder.Core.CryptoCurrency.Contract.Dtos;
+using CryptoReminder.Core.Dialog;
 using CryptoReminder.Core.RealmService;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
@@ -10,111 +12,162 @@ namespace CryptoReminder.Core.ViewModels
 {
     public class CryptoCurrencyDetailViewModel : BaseViewModel
     {
-        public ICryptoRealmService RealmService;
+        //public ICryptoRealmService RealmService;
+        public IDialogService DialogService;
+        public ICryptoDelegate CryptoDelegate { get; set; }
 
-        public CryptoCurrencyDetailViewModel()
+        public CryptoCurrencyDetailViewModel(IDialogService dialogService, ICryptoDelegate cryptoDelegate)
         {
-            RealmService = new CryptoRealmService();
-        }        
+            CryptoDelegate = cryptoDelegate;
+            DialogService = dialogService;
+        }             
 
-        public void Init(string cryptoCurrencyName)
+        public void Init(int reminderId, string currentMarketName, bool isNew)
         {
-            CurrentMarketName = cryptoCurrencyName;
+            IsNew = isNew;
+            if(IsNew)
+            {
+                Reminder = new CryptoCurrencyReminderDto
+                {
+                    MarketName = currentMarketName
+                };
+            }
+            else
+            {
+                Reminder = new CryptoCurrencyReminderDto
+                {
+                    Id = reminderId
+                };
+            }
         }
 
-        private bool _isAlarmSet;
-        public bool IsAlarmSet
+        private bool _isNew;
+        public bool IsNew
         {
-            get { return _isAlarmSet; }
+            get { return _isNew; }
             set {
-                _isAlarmSet = value;
-                RaisePropertyChanged(() => IsAlarmSet);
+                _isNew = value;
+                RaisePropertyChanged(() => IsNew);
             }
         }
 
-        private string _currentMarketName;
-        public string CurrentMarketName
-        {
-            get { return _currentMarketName; }
-            set { _currentMarketName = value;
-                RaisePropertyChanged(() => CurrentMarketName);
-            }
-        }
+        //private string _currentMarketName;
+        //public string CurrentMarketName
+        //{
+        //    get { return _currentMarketName; }
+        //    set
+        //    {
+        //        _currentMarketName = value;
+        //        RaisePropertyChanged(() => CurrentMarketName);
+        //    }
+        //}
 
-        private CryptoCurrencyReminderDto _cryptoCurrencyReminder;
-        public CryptoCurrencyReminderDto CryptoCurrencyReminder
+        //private int _reminderId;
+        //public int ReminderId
+        //{
+        //    get { return _reminderId; }
+        //    set { _reminderId = value;
+        //        RaisePropertyChanged(() => ReminderId);
+        //    }
+        //}
+
+
+        private CryptoCurrencyReminderDto _reminder;
+        public CryptoCurrencyReminderDto Reminder
         {
-            get { return _cryptoCurrencyReminder; }
+            get { return _reminder; }
             set {
-                _cryptoCurrencyReminder = value;
-                RaisePropertyChanged(() => CryptoCurrencyReminder);
+                _reminder = value;
+                RaisePropertyChanged(() => Reminder);
             }
         }
+        
+        //private double _lowerLimit;
+        //public double LowerLimit
+        //{
+        //    get { return _lowerLimit; }
+        //    set {
+        //        _lowerLimit = value;
+        //        RaisePropertyChanged(() => LowerLimit);
+        //    }
+        //}
 
+        //private double _exactValue;
+        //public double ExactValue
+        //{
+        //    get { return _exactValue; }
+        //    set {
+        //        _exactValue = value;
+        //        RaisePropertyChanged(() => ExactValue);
+        //    }
+        //}
 
-        private CryptoCurrencyDto _currentCryptoCurrency;
-        public CryptoCurrencyDto CurrentCryptoCurrency
-        {
-            get { return _currentCryptoCurrency; }
-            set {
-                _currentCryptoCurrency = value;
-                RaisePropertyChanged(() => CurrentCryptoCurrency);
-            }
-        }
-
-        private double _alarmValue;
-        public double AlarmValue
-        {
-            get { return _alarmValue; }
-            set {
-                _alarmValue = value;
-                RaisePropertyChanged(() => AlarmValue);
-            }
-        }
-
-        private MvxCommand _setAlarmCommand;
-        public ICommand SetAlarmCommand
+        //private double _upperLimit;
+        //public double UpperLimit
+        //{
+        //    get { return _upperLimit; }
+        //    set {
+        //        _upperLimit = value;
+        //        RaisePropertyChanged(() => UpperLimit);
+        //    }
+        //}
+        
+        private MvxCommand _updateAlarmCommand;
+        public ICommand UpdateAlarmCommand
         {
             get
             {
-                _setAlarmCommand = _setAlarmCommand ?? new MvxCommand(DoSetAlarmCommand);
-                return _setAlarmCommand;
+                _updateAlarmCommand = _updateAlarmCommand ?? new MvxCommand(DoUpdateAlarmCommand);
+                return _updateAlarmCommand;
             }
         }
 
-        public void DoSetAlarmCommand()
+        public void DoUpdateAlarmCommand()
         {
-            Task.Run(() => SetAlarm());
+            Task.Run(() => UpdateAlarm());
         }
 
-        public async void SetAlarm()
+        public async void UpdateAlarm()
         {
-            if (!IsAlarmSet)
+            if (!Reminder.IsExactValueSet && !Reminder.IsLowerLimitSet && !Reminder.IsUpperLimitSet)
             {
-                if(string.IsNullOrEmpty(AlarmValue.ToString()) || AlarmValue == 0)
-                {
-                    return;
-                }
+                //no value set 
+                DialogService.ShowErrorDialog();
+                //await Task.Delay(2000);
+                return;
             }
 
-            await Task.Run(() =>
+            Reminder = await CryptoDelegate.SaveReminder(Reminder);
+
+            DialogService.ShowSuccessDialog();
+            //await Task.Delay(2000);
+            Close(this);
+        }
+
+        private MvxCommand _removeAlarmCommand;
+        public ICommand RemoveAlarmCommand
+        {
+            get
             {
-                CryptoCurrencyReminder = new CryptoCurrencyReminderDto
-                {
-                    MarketName = CurrentMarketName,
-                    IsAlarmSet = !IsAlarmSet,
-                    Last = AlarmValue
-                };
+                _removeAlarmCommand = _removeAlarmCommand ?? new MvxCommand(DoRemoveAlarmCommand);
+                return _removeAlarmCommand;
+            }
+        }
 
-                RealmService.SaveReminder(CryptoCurrencyReminder);
+        public void DoRemoveAlarmCommand()
+        {
+            Task.Run(() => RemoveAlarm());
+        }
 
-                IsAlarmSet = !IsAlarmSet;
-
-                if(IsAlarmSet)
-                {
-                    AlarmValue = 0;
-                }
-            });
+        public async void RemoveAlarm()
+        {
+            var success = await CryptoDelegate.RemoveReminder(Reminder);
+            if(success)
+            {
+                DialogService.ShowSuccessDialog();
+                //await Task.Delay(2000);
+                Close(this);
+            }
         }
 
         private MvxCommand _loadCommand;
@@ -134,18 +187,10 @@ namespace CryptoReminder.Core.ViewModels
 
         public async void DoLoad()
         {
-            await Task.Run(() => {
+            if (IsNew)
+                return;
 
-                CryptoCurrencyReminder = RealmService.GetRemider(new CryptoCurrencyDto
-                {
-                    MarketName = CurrentMarketName
-                });
-
-                if (CryptoCurrencyReminder != null)
-                    IsAlarmSet = CryptoCurrencyReminder.IsAlarmSet;
-                else
-                    IsAlarmSet = false;
-            });
+            Reminder = await CryptoDelegate.GetReminderDetails(Reminder);
         }
     }
 }

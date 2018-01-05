@@ -5,10 +5,12 @@ namespace CryptoReminder.Core.RealmService
 {
     public interface ICryptoRealmService
     {
-        CryptoCurrencyReminderDto GetRemider(CryptoCurrencyDto cryptoCurrency);
+        CryptoCurrencyReminderDto GetReminderDetails(CryptoCurrencyReminderDto cryptoCurrency);
 
-        void SaveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder);
+        CryptoCurrencyReminderDto SaveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder);
 
-        List<CryptoCurrencyReminderDto> GetReminders();
+        bool RemoveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder);
+
+        List<CryptoCurrencyReminderDto> GetReminder(ReminderSearchDto search);
     }
 }

@@ -17,5 +17,15 @@ namespace CryptoReminder.Droid
                 AndroidHUD.AndHUD.Shared.Dismiss(Helper.CurrentActivity);
             }
         }
+
+        public void ShowSuccessDialog()
+        {
+            AndroidHUD.AndHUD.Shared.ShowSuccess(Helper.CurrentActivity, timeout: new TimeSpan(2));
+        }
+
+        public void ShowErrorDialog()
+        {
+            AndroidHUD.AndHUD.Shared.ShowError(Helper.CurrentActivity, timeout: new TimeSpan(2));
+        }
     }
 }

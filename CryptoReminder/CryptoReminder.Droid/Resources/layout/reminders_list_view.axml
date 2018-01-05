@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:local="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+  <include
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar" />
+  
+  <LinearLayout
+    android:id="@+id/llReminders"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:layout_weight="1">
+
+    <EditText
+      android:id="@+id/etSearchReminders"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="5dp"
+      android:textSize="16dp"
+      android:hint="Search"
+      android:textColor="@color/primaryTextColor"
+      local:MvxBind="Text RemindersSearchString"/>
+
+    <android.support.design.widget.CoordinatorLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <MvvmCross.Droid.Support.V4.MvxSwipeRefreshLayout
+        android:id="@+id/myCryptoCurrencyRefresher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        local:MvxBind="Refreshing IsRemindersRefreshing; RefreshCommand ReloadReminders">
+
+        <MvvmCross.Droid.Support.V7.RecyclerView.MvxRecyclerView
+          android:id="@+id/rvReminders"
+          android:scrollbars="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          local:MvxItemTemplate="@layout/all_reminders_item_view"
+          local:MvxBind="ItemsSource SortedReminders; ItemClick SelectReminderCommand" />
+
+      </MvvmCross.Droid.Support.V4.MvxSwipeRefreshLayout>
+
+      <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddReminder"
+        app:layout_behavior="@string/fab_scroll_translation_autohide_behavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_post_margin"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_plus"
+        local:elevation="4dp"
+        local:rippleColor="@color/primaryDarkColor" />
+    </android.support.design.widget.CoordinatorLayout>
+
+  </LinearLayout>
+  
+</LinearLayout>

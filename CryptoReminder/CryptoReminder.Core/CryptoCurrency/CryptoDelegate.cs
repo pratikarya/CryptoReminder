@@ -49,14 +49,41 @@ namespace CryptoReminder.Core.CryptoCurrency
             }
         }
 
-        public async Task<List<CryptoCurrencyReminderDto>> GetMyCryptoCurrencyList()
+        public async Task<List<CryptoCurrencyReminderDto>> GetReminder(ReminderSearchDto search)
         {
             return await Task.Run(() => {
-
-                var response = RealmService.GetReminders();
-
+                var response = RealmService.GetReminder(search);
                 return response;
+            });
+        }
 
+        public async Task<CryptoCurrencyReminderDto> SaveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder)
+        {
+            return await Task.Run(() =>
+            {
+                CryptoCurrencyReminderDto res;
+                res = RealmService.SaveReminder(cryptoCurrencyReminder);
+                return res;
+            });
+        }
+
+        public async Task<bool> RemoveReminder(CryptoCurrencyReminderDto cryptoCurrencyReminder)
+        {
+            return await Task.Run(() =>
+            {
+                bool res;
+                res = RealmService.RemoveReminder(cryptoCurrencyReminder);
+                return res;
+            });
+        }
+
+        public async Task<CryptoCurrencyReminderDto> GetReminderDetails(CryptoCurrencyReminderDto cryptoCurrency)
+        {
+            return await Task.Run(() =>
+            {
+                CryptoCurrencyReminderDto res;
+                res = RealmService.GetReminderDetails(cryptoCurrency);
+                return res;
             });
         }
     }

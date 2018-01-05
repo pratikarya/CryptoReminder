@@ -3,7 +3,10 @@
   <string name="app_name">CryptoReminder</string>
   <string name="btnSetalarmTitle">Set Alarm</string>
   <string name="btnRemovealarmTitle">Remove Alarm</string>
-  <string name="etHintReminder">Set your value.</string>
+  <string name="etHintLowerLimit">Set your lower limit value.</string>
+  <string name="etHintExactValue">Set your exact value.</string>
+  <string name="etHintUpperLimit">Set your upper limit value.</string>
   <string name="tabCryptoList">Live Values</string>
   <string name="tabMyCryptoList">My Reminders</string>
+  <string name="fab_scroll_translation_autohide_behavior">CryptoReminder.Droid.Common.ScrollBehavior</string>
 </resources>

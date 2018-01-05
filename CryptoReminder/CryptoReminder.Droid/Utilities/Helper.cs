@@ -23,6 +23,5 @@ namespace CryptoReminder.Droid.Utilities
                 return Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
             }
         }
-
     }
 }
